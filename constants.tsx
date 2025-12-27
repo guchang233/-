@@ -1,4 +1,3 @@
-
 import { Card, Character } from './types';
 
 export const INITIAL_HP = 20;
@@ -51,7 +50,6 @@ export const CHARACTERS: Character[] = [
 export const CARD_POOL: Card[] = [
   { id: 'base_1', name: '聚气术', cost: 0, type: '基础', rank: 0, description: '灵力+1', color: 'bg-slate-800 text-slate-200 border-slate-600' },
   { id: 'base_2', name: '灵气罩', cost: 0, type: '基础', rank: 0, description: '护盾+1', color: 'bg-slate-800 text-slate-200 border-slate-600' },
-  { id: 'w_0_1', name: '木剑术', cost: 1, type: '武器', rank: 0, pierceLevel: 0, description: '1伤害', color: 'bg-slate-700 text-slate-100 border-slate-500' },
   { id: 'w_1_1', name: '玄铁飞剑', cost: 2, type: '武器', rank: 1, pierceLevel: 0, description: '1伤害', color: 'bg-emerald-900 text-emerald-100 border-emerald-700' },
   { id: 'w_1_2', name: '五雷正法', cost: 3, type: '武器', rank: 1, pierceLevel: 0, description: '2伤害', color: 'bg-emerald-900 text-emerald-100 border-emerald-700' },
   { id: 'w_2_1', name: '青索神剑', cost: 4, type: '武器', rank: 2, pierceLevel: 1, description: '2伤害，破金身I', color: 'bg-blue-900 text-blue-100 border-blue-700' },
