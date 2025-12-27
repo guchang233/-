@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -6,22 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>诸天论道 - 仙侠卡牌竞技</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #040808;
+            --text-color: #e2e8f0;
+        }
         body {
             font-family: 'Noto Serif SC', "Microsoft YaHei", serif;
-            background-color: #040808;
-            color: #e2e8f0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             overflow: hidden;
             height: 100vh;
             width: 100vw;
             touch-action: manipulation;
+            font-size: 16px;
         }
+        @media (max-width: 640px) {
+            body { font-size: 14px; }
+        }
+
         .font-classical { font-family: 'Ma Shan Zheng', cursive; }
         
-        /* 仙气背景 */
         .mist-bg {
             background: radial-gradient(circle at center, #0a1a1a 0%, #050a0a 100%);
             position: relative;
@@ -35,46 +43,42 @@
             position: fixed;
             top: 0; left: 0; width: 200%; height: 200%;
             background-image: url('https://www.transparenttextures.com/patterns/cloudy-day.png');
-            opacity: 0.05;
+            opacity: 0.03;
             z-index: 1;
             animation: cloud-move 200s linear infinite;
             pointer-events: none;
         }
 
-        /* 传统红印章效果 - 增加阴影和亮度 */
+        .mask-fade-edges {
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+        }
+
         .ink-stamp {
             position: absolute;
             font-family: 'Ma Shan Zheng', cursive;
-            border: 3px solid #ef4444;
+            border: 2px solid #ef4444;
             color: #ef4444;
-            padding: 4px 10px;
-            text-transform: uppercase;
-            font-weight: bold;
-            transform: rotate(-25deg);
-            background: rgba(127, 29, 29, 0.2);
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4), inset 0 0 5px rgba(239, 68, 68, 0.5);
-            border-radius: 4px;
-            user-select: none;
+            padding: 1px 6px;
+            transform: rotate(-12deg);
+            background: rgba(127, 29, 29, 0.4);
+            border-radius: 2px;
             z-index: 60;
-            text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+            font-size: 1rem;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
         }
 
-        /* 灵压震动 */
         @keyframes spirit-shake {
-            0% { transform: translate(0,0); }
-            10% { transform: translate(-3px, 3px) rotate(-1deg); }
-            30% { transform: translate(3px, -3px) rotate(1deg); }
-            50% { transform: translate(-1px, 1px); }
-            100% { transform: translate(0,0); }
+            0%, 100% { transform: translate(0,0); }
+            25% { transform: translate(-2px, 1px); }
+            75% { transform: translate(2px, -1px); }
         }
-        .shake-anim { animation: spirit-shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        .shake-anim { animation: spirit-shake 0.2s ease-in-out both; }
 
-        /* 气血飘字 - 强化动画，确保在最顶层 */
         @keyframes spirit-float {
-          0% { opacity: 0; transform: translate(-50%, 20px) scale(0.5); filter: blur(5px); }
-          20% { opacity: 1; transform: translate(-50%, -20px) scale(1.5); filter: blur(0); }
-          80% { opacity: 1; transform: translate(-50%, -80px) scale(1.2); filter: blur(0); }
-          100% { opacity: 0; transform: translate(-50%, -150px) scale(1); filter: blur(8px); }
+          0% { opacity: 0; transform: translate(-50%, 10px); }
+          20% { opacity: 1; transform: translate(-50%, -5px); }
+          100% { opacity: 0; transform: translate(-50%, -60px); }
         }
         .float-text { 
             position: absolute;
@@ -82,50 +86,50 @@
             pointer-events: none;
             z-index: 999;
             white-space: nowrap;
-            animation: spirit-float 2.2s cubic-bezier(0.19, 1, 0.22, 1) forwards; 
-            text-shadow: 0 0 10px currentColor;
+            animation: spirit-float 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards; 
+            text-shadow: 0 0 8px currentColor;
         }
 
-        /* 金身特效 - 强化光芒 */
-        @keyframes immortal-glow {
-            0% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(245, 158, 11, 0.8); }
-            100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
-        }
-        .invincible-lv1 { animation: immortal-glow 3s infinite; border-color: rgba(245, 158, 11, 0.6) !important; }
-        .invincible-lv2 { animation: immortal-glow 2s infinite; border-color: rgba(245, 158, 11, 0.9) !important; }
-        .invincible-lv3 { animation: immortal-glow 1s infinite; border-color: rgba(245, 158, 11, 1) !important; }
+        .invincible-lv1 { border-color: rgba(245, 158, 11, 0.6) !important; box-shadow: 0 0 10px rgba(245, 158, 11, 0.3); }
+        .invincible-lv2 { border-color: rgba(245, 158, 11, 0.8) !important; box-shadow: 0 0 18px rgba(245, 158, 11, 0.5); }
+        .invincible-lv3 { border-color: rgba(245, 158, 11, 1.0) !important; box-shadow: 0 0 30px rgba(245, 158, 11, 0.7); }
 
-        /* 玉石面板 */
-        .jade-panel {
-            background: rgba(6, 15, 15, 0.92);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.95);
-        }
-
-        /* 选中发光 - 强化边缘 */
         .card-active-glow {
-            box-shadow: 0 0 45px rgba(16, 185, 129, 0.6);
-            transform: translateY(-24px) scale(1.08) !important;
+            box-shadow: 0 0 30px rgba(45, 212, 191, 0.6);
+            transform: translateY(-20px) scale(1.08) !important;
             z-index: 150 !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        .jade-panel {
+            background: rgba(8, 15, 15, 0.96);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(45, 212, 191, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
         }
 
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* 响应式调整 */
-        @media (max-width: 640px) {
-            .float-text { font-size: 1.5rem !important; }
+        .lucide { width: 1.2em; height: 1.2em; vertical-align: middle; }
+
+        /* 卡牌背景色彩强制渲染 */
+        .card-saturate {
+            filter: saturate(1.4) contrast(1.1);
+            transition: filter 0.3s ease;
+        }
+        .card-saturate:hover {
+            filter: saturate(1.6) contrast(1.15);
         }
     </style>
 <script type="importmap">
 {
   "imports": {
-    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
-    "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }
 }
 </script>
@@ -133,5 +137,6 @@
 <body class="mist-bg">
     <div class="clouds"></div>
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>
