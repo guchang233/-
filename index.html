@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>诸天论道 - 仙侠卡牌竞技</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Serif SC', "Microsoft YaHei", serif;
+            background-color: #040808;
+            color: #e2e8f0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            touch-action: manipulation;
+        }
+        .font-classical { font-family: 'Ma Shan Zheng', cursive; }
+        
+        /* 仙气背景 */
+        .mist-bg {
+            background: radial-gradient(circle at center, #0a1a1a 0%, #050a0a 100%);
+            position: relative;
+        }
+        
+        @keyframes cloud-move {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .clouds {
+            position: fixed;
+            top: 0; left: 0; width: 200%; height: 200%;
+            background-image: url('https://www.transparenttextures.com/patterns/cloudy-day.png');
+            opacity: 0.05;
+            z-index: 1;
+            animation: cloud-move 200s linear infinite;
+            pointer-events: none;
+        }
+
+        /* 传统红印章效果 - 增加阴影和亮度 */
+        .ink-stamp {
+            position: absolute;
+            font-family: 'Ma Shan Zheng', cursive;
+            border: 3px solid #ef4444;
+            color: #ef4444;
+            padding: 4px 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transform: rotate(-25deg);
+            background: rgba(127, 29, 29, 0.2);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4), inset 0 0 5px rgba(239, 68, 68, 0.5);
+            border-radius: 4px;
+            user-select: none;
+            z-index: 60;
+            text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+        }
+
+        /* 灵压震动 */
+        @keyframes spirit-shake {
+            0% { transform: translate(0,0); }
+            10% { transform: translate(-3px, 3px) rotate(-1deg); }
+            30% { transform: translate(3px, -3px) rotate(1deg); }
+            50% { transform: translate(-1px, 1px); }
+            100% { transform: translate(0,0); }
+        }
+        .shake-anim { animation: spirit-shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+
+        /* 气血飘字 - 强化动画，确保在最顶层 */
+        @keyframes spirit-float {
+          0% { opacity: 0; transform: translate(-50%, 20px) scale(0.5); filter: blur(5px); }
+          20% { opacity: 1; transform: translate(-50%, -20px) scale(1.5); filter: blur(0); }
+          80% { opacity: 1; transform: translate(-50%, -80px) scale(1.2); filter: blur(0); }
+          100% { opacity: 0; transform: translate(-50%, -150px) scale(1); filter: blur(8px); }
+        }
+        .float-text { 
+            position: absolute;
+            left: 50%;
+            pointer-events: none;
+            z-index: 999;
+            white-space: nowrap;
+            animation: spirit-float 2.2s cubic-bezier(0.19, 1, 0.22, 1) forwards; 
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        /* 金身特效 - 强化光芒 */
+        @keyframes immortal-glow {
+            0% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(245, 158, 11, 0.8); }
+            100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
+        }
+        .invincible-lv1 { animation: immortal-glow 3s infinite; border-color: rgba(245, 158, 11, 0.6) !important; }
+        .invincible-lv2 { animation: immortal-glow 2s infinite; border-color: rgba(245, 158, 11, 0.9) !important; }
+        .invincible-lv3 { animation: immortal-glow 1s infinite; border-color: rgba(245, 158, 11, 1) !important; }
+
+        /* 玉石面板 */
+        .jade-panel {
+            background: rgba(6, 15, 15, 0.92);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.95);
+        }
+
+        /* 选中发光 - 强化边缘 */
+        .card-active-glow {
+            box-shadow: 0 0 45px rgba(16, 185, 129, 0.6);
+            transform: translateY(-24px) scale(1.08) !important;
+            z-index: 150 !important;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* 响应式调整 */
+        @media (max-width: 640px) {
+            .float-text { font-size: 1.5rem !important; }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+  }
+}
+</script>
+</head>
+<body class="mist-bg">
+    <div class="clouds"></div>
+    <div id="root"></div>
+</body>
+</html>
